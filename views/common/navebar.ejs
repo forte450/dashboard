@@ -1,0 +1,107 @@
+
+<body>
+    <div id="app">
+      <div class="main-wrapper">
+        <div class="navbar-bg"></div>
+        <nav class="navbar navbar-expand-lg main-navbar">
+          <form class="form-inline mr-auto">
+            <ul class="navbar-nav mr-3">
+              <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
+              <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li>
+            </ul>
+           
+          </form>
+          <ul class="navbar-nav navbar-right">
+           
+            <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+              <img alt="image" src="/images/<%=session.image%>" class="rounded-circle mr-1">
+              <div class="d-sm-none d-lg-inline-block"><%=session.first_name%></div></a>
+              <div class="dropdown-menu dropdown-menu-right">
+                <div class="dropdown-title"></div>
+                <a href="/profile" class="dropdown-item has-icon">
+                  <i class="far fa-user"></i> Profile
+                </a>
+                <a href="/change_password" class="dropdown-item has-icon">
+                  <i class="fas fa-cog"></i> Change Password
+                </a>
+             
+                  <!-- <a class="dropdown-item has-icon"> <i class="fas fa-language"></i>Language</a>
+                  <div class="dropdown-content">
+                    <a href="#">English</a>
+                    <a href="#">Arabic</a>
+                   
+                  </div> -->
+              
+                <a href="/helpListing" class="dropdown-item has-icon"><i class="fas fa-question-circle"></i>Help</a>
+                <div class="dropdown-divider"></div>
+                <a onclick="confirmLogout()" class="dropdown-item has-icon text-danger"
+                style="cursor:pointer" ;>
+                <i class="fas fa-sign-out-alt"></i>Logout</a>
+                
+              </div>
+              
+            </li>
+            
+          </ul>
+        </nav>
+
+        <script>
+          function confirmLogout() {
+              console.log(">>>>>>>>done>>>>>>>>>>", )
+        
+        
+              const swalWithBootstrapButtons = Swal.mixin({
+                  customClass: {
+                      confirmButton: 'btn btn-danger',
+                      cancelButton: 'btn btn-success'
+                  },
+                  buttonsStyling: false
+              })
+              // console.log("------------------------------result------", id);
+        
+              swalWithBootstrapButtons.fire({
+                  title: 'Are you sure?',
+                  text: "You won't be Logout!",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: 'Yes, Logout it!',
+                  cancelButtonText: 'No, cancel!',
+                  reverseButtons: true
+              }).then((isConfirm) => {
+                  // console.log(isConfirm)
+                  // return
+                  if (isConfirm.isConfirmed)
+                  {
+                      // alert('asd')
+                      $.ajax({
+        
+                          url: "/logout",
+                          type: 'get',
+                          // data: { id: id },
+                          success: function (result) {
+        
+                          }
+        
+        
+                      });
+        
+        
+                      swalWithBootstrapButtons.fire(
+                          'Logout!',
+                          'You  has been Lougout .',
+                          'success'
+                      ).then(() => {
+                          location.reload();
+                      })
+                  } else
+                  {
+                      swalWithBootstrapButtons.fire(
+                          'Cancelled',
+                          'Your session is safe :)',
+                          'error'
+                      )
+                  }
+              })
+        
+          }
+        </script>

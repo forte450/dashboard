@@ -1,0 +1,137 @@
+ 
+ 
+  <%-include("../common/header")%>
+  
+ 
+  <%-include('../common/navebar')%>
+  <%-include('../common/sidebar')%>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <section class="section">
+      <div class="section-header">
+        <!-- <a class="pr-2" href="javascript:history.go(-1);">
+  
+          <i class='fa fa-arrow-circle-left' style="font-size:20px"></i> </a> -->
+        <h1>Category List</h1>
+       
+      </div>
+
+      <div class="section-body">
+        
+       
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header w-100">
+                <div class="col-sm-12 col-md-7 ">
+                  <a href="/invoiceCreate"><button class="btn btn-primary submit_btns">Add</button></a>
+                </div>
+              </div>
+              <div class="card-body">
+                <table class="table" id="myTable">
+                  <thead>
+                    <tr>
+                      <th scope="col">Sr No </th>
+                      <th scope="col">Category Name</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <% invoiceObj.forEach((data,i)=>{%>
+                      <th scope="row"><%= i+1 %></th>
+                      <td> <%=data.first_name%></td>
+                      <!-- <td> <img src="/images/<%=data.category_image%>"
+                        alt="<%data.category_image%>" height="50px" width="50px"></td> -->
+                      <!-- <td><a href="/editCategory/<%-data.id%>">Edit</a>/<a href="/deleteCategory/<%-data.id%>">Delete</a></td> -->
+                      <td> 
+                        <!-- <a href="cateView/<%= data.id %>" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a>
+                        <a href="editCategory/<%= data.id %>" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a> -->
+                        <!-- <a href="delete/<%= data.id %>" class="btn btn-sm btn-danger">Delete</a> -->
+                        <button onclick="confirmDelete('<%=data.id%>')"
+                          class="btn btn-sm btn-danger 
+                                deletdat>"><i class="fa fa-trash"></i></button>
+                      </td>
+                    </tr>
+                    <%})%>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <%-include("../common/footer")%>
+  <script>
+    $(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+  </script>
+
+<script>
+  $(document).ready(function () {
+      // alert("ready!");
+  });
+
+  function confirmDelete(id) {
+      console.log(">>>>>>>>done>>>>>>>>>>", id)
+
+
+      const swalWithBootstrapButtons = Swal.mixin({
+          customClass: {
+              confirmButton: 'btn btn-danger',
+              cancelButton: 'btn btn-success'
+          },
+          buttonsStyling: false
+      })
+      // console.log("------------------------------result------", id);
+
+      swalWithBootstrapButtons.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, delete it!',
+          cancelButtonText: 'No, cancel!',
+          reverseButtons: true
+      }).then((isConfirm) => {
+          // console.log(isConfirm)
+          // return
+          if (isConfirm.isConfirmed)
+          {
+              // alert('asd')
+              $.ajax({
+
+                  url: "/delete/:id",
+                  type: 'delete',
+                  data: { id: id },
+                  success: function (result) {
+
+                  }
+
+
+              });
+
+
+              swalWithBootstrapButtons.fire(
+                  'Deleted!',
+                  'The Category has been deleted .',
+                  'success'
+              ).then(() => {
+                  location.reload();
+              })
+          } else
+          {
+              swalWithBootstrapButtons.fire(
+                  'Cancelled',
+                  'The Category is safe :)',
+                  'error'
+              )
+          }
+      })
+
+  }
+</script>

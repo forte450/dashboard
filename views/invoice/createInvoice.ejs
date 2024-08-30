@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<%-include("../common/header")%>
+
+
+<style>
+  .error {
+    color: red;
+  }
+</style>
+
+<body>
+
+  <div id="app">
+    <div class="main-wrapper">
+      <div class="navbar-bg"></div>
+
+
+      <%-include('../common/navebar')%>
+      <%-include('../common/sidebar')%>
+      <!-- Main Content -->
+      <div class="main-content">
+        <section class="section">
+          <div class="section-header">
+            <h1>Add Category</h1>
+
+          </div>
+
+          <div class="section-body">
+
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <!-- <div class="card-header">
+                    <div class=""><a href="/showCategory">Back</a></div>
+                  </div> -->
+                  <form action="/addcategory" method="POST" id="signupForm" enctype="multipart/form-data">
+                    <div class="card-body">
+                      <div class="form-group">
+                        <label>Category Name</label>
+                        <input type="text" name="category_name" id="category_name" class="form-control">
+                      </div>
+                      <!-- <div class="form-group">
+                        <label>Category Image</label>
+                        <input type="file" name="category_image" id="category_image" class="form-control" required>
+                      </div> -->
+
+                      <div class="col-sm-12 col-md-7 ">
+                        <button class="btn btn-primary submit_btns">Add</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <%-include('../common/footer')%>
+      <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+      <script>
+        $(document).ready(function() {
+
+          $("#signupForm").validate({
+            rules: {
+              category_name: {
+                // noSpace: true,
+                required: true,
+                normalizer: function(value) {
+                  return $.trim(value)
+                },
+                category_image: 'required',
+              },
+            },
+            messages: {
+              category_name: {
+                required: "Please enter a Category name",
+                maxlength: "max length 15 digits",
+                minlength: "Your Category name must consist of at least 2 characters"
+              },
+              category_image: 'This field is required',
+
+            },
+            submitHandler: function(form) {
+              form.submit();
+            }
+          })
+        })
+      </script>
+
+
+
+
+      <!-- <script>
+    $('form[id="signupForm"]').validate({
+      onkeyup: function(element) {
+              var element_id = $(element).attr('id');
+              if (this.settings.rules[element_id].onkeyup !== false) {
+                  $(element).valid();
+              }
+          },      
+    rules: {
+      category_name: 'required',
+      category_image: 'required',
+    },
+    messages: {
+      category_name: " Please enter category name",
+      category_image: 'This field is required',
+      
+    },
+    submitHandler: function(form) {
+      form.submit();
+    }
+  });
+  </script> -->

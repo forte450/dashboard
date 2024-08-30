@@ -1,0 +1,78 @@
+<%-include("./common/header")%>
+<%-include("./common/navebar")%>
+<%-include("./common/sidebar")%>
+
+<!-- header -->
+
+    <div id="preloader">  
+      <div class="main-content">
+        <section class="section">
+          <div class="section-header">
+            <h1>Dashboard</h1>
+          </div>
+          <div class="row">
+            <div class="col-lg-3  col-md-6 col-sm-6 col-12">
+              <a href="/listing" >
+              <div class="card mb-3 card-statistic-1">
+                <div class="card-icon bg-primary">
+                  <i class="far fa-user"></i>
+                </div>
+                <div class="card-wrap">
+                  <div class="card-header">
+                    <h4>Total Users</h4>
+                  </div>
+                  <div class="card-body">
+                    <%= totalUsers %>
+                  </div>
+                </div>
+              </div>
+              </a>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+              <a href="/invoiceListing" >
+              <div class="card mb-3 card-statistic-1">
+                <div class="card-icon bg-danger">
+                  <i class="far fa-newspaper"></i>
+                </div>
+                <div class="card-wrap">
+                  <div class="card-header">
+                    <h4>Total Invoice</h4>
+                  </div>
+                  <div class="card-body">
+                    1
+                  </div>
+                </div>
+              </div>
+            </a>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+              <a href="/withdraw_request_listing" >
+              <div class="card mb-3 card-statistic-1">
+                <div class="card-icon bg-warning">
+                  <i class="far fa-money-bill-alt"></i>
+                </div>
+                <div class="card-wrap">
+                  <div class="card-header">
+                    <h4>Total Withdraw</h4>
+                  </div>
+                  <div class="card-body">
+                    0
+                  </div>
+                </div>
+              </div>
+            </a>
+            </div>
+          </div>
+          
+        </section>
+      </div>
+    </div> 
+<!-- Footer -->
+
+<%-include("./common/footer")%>
+<script type="text/javascript">
+  jQuery("body").prepend('<div id="preloader">Loading...</div>');
+  jQuery(document).ready(function() {
+      jQuery("#preloader").remove();
+  });
+</script>
