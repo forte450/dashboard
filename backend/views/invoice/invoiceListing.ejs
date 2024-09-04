@@ -1,0 +1,179 @@
+<%- include("../common/header") %>
+
+<%- include('../common/navebar') %>
+<%- include('../common/sidebar') %>
+
+<!-- Main Content -->
+<div class="main-content">
+  <section class="section">
+    <div class="section-header">
+      <!-- Filter Form -->
+      <h1>Invoice List</h1>
+      <form id="filterForm" method="get" style="display: flex; align-items: center; gap: 10px;">
+        <label for="month">Filter by Month:</label>
+        <select id="month" name="month" class="form-control" style="width: auto;">
+          <option value="">-- Select Month --</option>
+          <option value="1" <% if (monthFilter === '1') { %>selected<% } %>>January</option>
+          <option value="2" <% if (monthFilter === '2') { %>selected<% } %>>February</option>
+          <option value="3" <% if (monthFilter === '3') { %>selected<% } %>>March</option>
+          <option value="4" <% if (monthFilter === '4') { %>selected<% } %>>April</option>
+          <option value="5" <% if (monthFilter === '5') { %>selected<% } %>>May</option>
+          <option value="6" <% if (monthFilter === '6') { %>selected<% } %>>June</option>
+          <option value="7" <% if (monthFilter === '7') { %>selected<% } %>>July</option>
+          <option value="8" <% if (monthFilter === '8') { %>selected<% } %>>August</option>
+          <option value="9" <% if (monthFilter === '9') { %>selected<% } %>>September</option>
+          <option value="10" <% if (monthFilter === '10') { %>selected<% } %>>October</option>
+          <option value="11" <% if (monthFilter === '11') { %>selected<% } %>>November</option>
+          <option value="12" <% if (monthFilter === '12') { %>selected<% } %>>December</option>
+        </select>
+      </form>
+    </div>
+
+    <div class="section-body">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header w-100" style="display: flex; justify-content: end; gap: 10px;">
+              <div class="card-header-btn">
+                <a href="/invoiceCreate"><button class="btn btn-primary submit_btns">+New Invoice</button></a>
+              </div>
+              <div class="card-header-btn card-header-btn--seond">
+                <a href="/recurringinvoiceCreate"><button class="btn btn-primary submit_btns">+New Recurring Invoice</button></a>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table" id="myTable">
+                <thead>
+                  <tr>
+                    <th scope="col">Sr No</th>
+                    <th scope="col">Invoice Date</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Mobile</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Total Amount</th>
+                    <th scope="col">Remarks</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="invoiceTableBody">
+                  <% invoiceObj.forEach((data, i) => { %>
+                  <tr>
+                    <th scope="row"><%= i + 1 %></th>
+                    <td><%= data.formattedDate %></td>
+                    <td><%= data.customer_name %></td>
+                    <td><%= data.mobile_no %></td>
+                    <td>
+                      <% if (data.status == 1) { %>
+                        Paid
+                      <% } else if (data.status == 2) { %>
+                        Overdue
+                      <% } else if (data.status == 3) { %>
+                        Awaiting Payment
+                      <% } else { %>
+                        Unknown Status
+                      <% } %>
+                    </td>
+                    <td><%= data.amount %></td>
+                    <td><%= data.message %></td>
+                    <td>
+                      <button onclick="confirmDelete('<%= data.id %>')" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                    </td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<%- include("../common/footer") %>
+
+<script>
+  $(document).ready(function() {
+    $('#myTable').DataTable();
+
+    // Attach change event listener to the month select
+    $('#month').change(function() {
+      let selectedMonth = $(this).val();
+      $.ajax({
+        url: '/invoiceListing',
+        type: 'GET',
+        data: { month: selectedMonth },
+        success: function(data) {
+          // Clear the existing table rows
+          $('#invoiceTableBody').empty();
+
+          // Append new rows based on the filtered data
+          data.invoiceObj.forEach((item, index) => {
+            $('#invoiceTableBody').append(`
+              <tr>
+                <th scope="row">${index + 1}</th>
+                <td>${item.formattedDate}</td>
+                <td>${item.customer_name}</td>
+                <td>${item.mobile_no}</td>
+                <td>
+                  ${item.status == 1 ? 'Paid' : 
+                   item.status == 2 ? 'Overdue' : 
+                   item.status == 3 ? 'Awaiting Payment' : 'Unknown Status'}
+                </td>
+                <td>${item.amount}</td>
+                <td>${item.message}</td>
+                <td>
+                  <button onclick="confirmDelete('${item.id}')" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                </td>
+              </tr>
+            `);
+          });
+
+          // Reinitialize DataTable
+          $('#myTable').DataTable().draw();
+        }
+      });
+    });
+  });
+
+  function confirmDelete(id) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-danger',
+        cancelButton: 'btn btn-success'
+      },
+      buttonsStyling: false
+    });
+
+    swalWithBootstrapButtons.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: `/delete/${id}`,
+          type: 'DELETE',
+          success: function() {
+            swalWithBootstrapButtons.fire(
+              'Deleted!',
+              'The invoice has been deleted.',
+              'success'
+            ).then(() => {
+              location.reload();
+            });
+          }
+        });
+      } else {
+        swalWithBootstrapButtons.fire(
+          'Cancelled',
+          'The invoice is safe :)',
+          'error'
+        );
+      }
+    });
+  }
+</script>

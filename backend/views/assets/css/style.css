@@ -1,0 +1,90 @@
+.container {
+    max-width: 950px;
+  }
+  
+  .invoice-form {
+    border-width: 1px 2px;
+    border-color: #AAADB1;
+    border-style: solid;
+    border-radius: 10px;
+  }
+  .bg-sh {
+    border: none; /* Remove the border */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add box shadow */
+    border-radius: 10px; /* Optional: Add border-radius for smoother corners */
+  }
+  
+  .card-header h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  
+  .input-group-text {
+    background-color: #f5f5f5;
+  }
+  
+  .form-control {
+    border-radius: 5px;
+  }
+  
+  .btn-light {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    color: #495057;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    border: none;
+  }
+  
+  .text-danger {
+    color: #dc3545;
+  }
+  
+  textarea.form-control {
+    resize: none;
+  }
+  /* Align labels to the left */
+  .form-label {
+    text-align: left;
+    display: block;
+    margin-bottom: .5rem;
+  }
+  
+  /* Make form inputs take full width */
+  .form-input {
+    width: 100%;
+  }
+  /* Style for input groups to have consistent widths */
+  .input-group {
+    display: flex;
+    align-items: center;
+  }
+  
+  .input-group-text {
+    width: 120px; /* Adjust this width to match your desired width */
+    text-align: center;
+  }
+  
+  .form-select {
+    width: 120px; /* Match this width with the input-group-text */
+  }
+  
+  .form-control {
+    flex: 1; /* Allow form-control to take up the remaining space */
+  }
+  
+  .form-input {
+    width: 100%;
+  }
+  .mr-2 {
+    margin-right: 1rem;
+  }
+  
+  .input-group>.form-control, .input-group>.form-floating, .input-group>.form-select {
+    position: relative;
+    width: 20%;
+    min-width: 0;
+    flex:unset !important;
+  }
